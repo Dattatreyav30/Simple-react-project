@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import UserInput from "./components/Users/UserInput/UserInput";
 import UserList from "./components/Users/UserList/UserList";
 import './App.css'
@@ -21,14 +21,14 @@ const App = () => {
   };
 
   return (
-    <div >
+    <Fragment>
       <section id="user-inputs">
         <UserInput onInput={onInputHandler} />
       </section>
       <section id="user-form">
         <UserList items={users} />
       </section>
-    </div>
+    </Fragment>
   );
 };
 

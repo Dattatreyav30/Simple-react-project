@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Button from "../../UI/Button";
 import Card from "../../UI/Card";
-import './UserInput.css'
+import "./UserInput.css";
+import ReactDOM from "react-dom";
+// import Wrapper from "../../Helpers/Wrapper";
+
 const UserInput = (props) => {
   const [userData, setUserData] = useState({
     userName: "",
@@ -35,7 +38,7 @@ const UserInput = (props) => {
       setIsValid(false);
       return;
     } else if (userData.age.trim() < 0) {
-      setValidAge(false);
+      return setValidAge(false);
     }
     props.onInput(userData);
     setUserData({ userName: "", age: "" });
@@ -43,10 +46,32 @@ const UserInput = (props) => {
 
   const onChnageCardHandler = (boolean) => {
     setIsValid(boolean);
-    setValidAge(boolean)
+    setValidAge(boolean);
   };
+
+  const Overlay = () => {
+    return (
+      <Fragment>
+        {!isValid && (
+          <Card
+            title={"!Warning"}
+            content={"Please Enter valid age and username"}
+            onChange={onChnageCardHandler}
+          />
+        )}
+        {!isageValid && (
+          <Card
+            title={"!Warning"}
+            content={"Please enter age > 0"}
+            onChange={onChnageCardHandler}
+          />
+        )}
+      </Fragment>
+    );
+  };
+
   return (
-    <div>
+    <Fragment>
       <div className="form-control">
         <form method="post" onSubmit={submitHandler}>
           <input
@@ -64,20 +89,11 @@ const UserInput = (props) => {
           <Button type="submit">Add user</Button>
         </form>
       </div>
-      <div>
-        {!isValid && (
-          <Card
-            title={"!Warning"}
-            content={"Please Enter valid age and username"}
-            onChange={onChnageCardHandler}
-          />
-        )}
-        {!isageValid && (
-          <Card title={"!Warning"} content={"Please enter age > 0"} onChange = {onChangeAgeHandler} />
-          
-        )}
-      </div>
-    </div>
+      {ReactDOM.createPortal(
+        <Overlay />,
+        document.getElementById("overlay-root")
+      )}
+    </Fragment>
   );
 };
 
