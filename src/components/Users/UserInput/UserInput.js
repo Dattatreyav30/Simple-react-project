@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 const UserInput = (props) => {
   const nameInputRef = useRef();
   const ageInputRef = useRef();
+  const collegeInputRef = useRef();
 
   const [isValid, setIsValid] = useState(true);
   const [isageValid, setValidAge] = useState(true);
@@ -17,7 +18,8 @@ const UserInput = (props) => {
 
     if (
       nameInputRef.current.value.trim().length === 0 ||
-      ageInputRef.current.value.trim().length === 0
+      ageInputRef.current.value.trim().length === 0 ||
+      collegeInputRef.current.value.trim().length === 0
     ) {
       setIsValid(false);
       return;
@@ -27,9 +29,11 @@ const UserInput = (props) => {
     props.onInput({
       userName: nameInputRef.current.value,
       age: ageInputRef.current.value,
+      college: collegeInputRef.current.value,
     });
     nameInputRef.current.value = "";
     ageInputRef.current.value = "";
+    collegeInputRef.current.value = "";
   };
 
   const onChnageCardHandler = (boolean) => {
@@ -74,6 +78,7 @@ const UserInput = (props) => {
             placeholder="age"
             ref={ageInputRef}
           />
+          <input type="text" placeholder="college name" ref={collegeInputRef} />
           <Button type="submit">Add user</Button>
         </form>
       </div>
