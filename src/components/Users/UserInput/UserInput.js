@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useRef } from "react";
 import Button from "../../UI/Button";
 import Card from "../../UI/Card";
 import "./UserInput.css";
@@ -6,42 +6,30 @@ import ReactDOM from "react-dom";
 // import Wrapper from "../../Helpers/Wrapper";
 
 const UserInput = (props) => {
-  const [userData, setUserData] = useState({
-    userName: "",
-    age: "",
-  });
+  const nameInputRef = useRef();
+  const ageInputRef = useRef();
 
   const [isValid, setIsValid] = useState(true);
   const [isageValid, setValidAge] = useState(true);
-
-  const onChangeNameHandler = (e) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      userName: e.target.value,
-    }));
-  };
-
-  const onChangeAgeHandler = (e) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      age: e.target.value,
-    }));
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (
-      userData.userName.trim().length === 0 ||
-      userData.age.trim().length === 0
+      nameInputRef.current.value.trim().length === 0 ||
+      ageInputRef.current.value.trim().length === 0
     ) {
       setIsValid(false);
       return;
-    } else if (userData.age.trim() < 0) {
+    } else if (ageInputRef.current.value < 0) {
       return setValidAge(false);
     }
-    props.onInput(userData);
-    setUserData({ userName: "", age: "" });
+    props.onInput({
+      userName: nameInputRef.current.value,
+      age: ageInputRef.current.value,
+    });
+    nameInputRef.current.value = "";
+    ageInputRef.current.value = "";
   };
 
   const onChnageCardHandler = (boolean) => {
@@ -75,16 +63,16 @@ const UserInput = (props) => {
       <div className="form-control">
         <form method="post" onSubmit={submitHandler}>
           <input
-            onChange={onChangeNameHandler}
             type="text"
             placeholder="username"
-            value={userData.userName}
+            // value={userData.userName}
+            ref={nameInputRef}
           />
           <input
-            onChange={onChangeAgeHandler}
-            value={userData.age}
+            // value={userData.age}
             type="number"
             placeholder="age"
+            ref={ageInputRef}
           />
           <Button type="submit">Add user</Button>
         </form>
